@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { createYoga, createSchema } from "graphql-yoga";
-import type { NextApiRequest, NextApiResponse } from "next";
 import { join } from "path";
+import { Resolvers } from "../../types";
 
 export const config = {
   api: {
@@ -14,9 +14,9 @@ const typeDefs = readFileSync(join(process.cwd(), "schemas/index.gql"), {
   encoding: "utf-8",
 });
 
-const resolvers = {
+const resolvers: Resolvers = {
   Query: {
-    cart: (_: any, { id }: any) => {
+    cart: (_, { id }) => {
       return {
         id,
         totalItems: 0,
@@ -25,10 +25,7 @@ const resolvers = {
   },
 };
 
-export default createYoga<{
-  req: NextApiRequest;
-  res: NextApiResponse;
-}>({
+export default createYoga<any>({
   schema: createSchema({
     typeDefs,
     resolvers,
