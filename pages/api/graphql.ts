@@ -14,17 +14,24 @@ const typeDefs = readFileSync(join(process.cwd(), "schemas/index.gql"), {
   encoding: "utf-8",
 });
 
+const resolvers = {
+  Query: {
+    cart: (_: any, { id }: any) => {
+      return {
+        id,
+        totalItems: 0,
+      };
+    },
+  },
+};
+
 export default createYoga<{
   req: NextApiRequest;
   res: NextApiResponse;
 }>({
   schema: createSchema({
     typeDefs,
-    resolvers: {
-      Query: {
-        greet: () => "Hello",
-      },
-    },
+    resolvers,
   }),
   graphqlEndpoint: "/api/graphql",
 });
