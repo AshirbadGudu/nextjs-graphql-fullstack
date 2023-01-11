@@ -1,5 +1,7 @@
+import { readFileSync } from "fs";
 import { createYoga, createSchema } from "graphql-yoga";
 import type { NextApiRequest, NextApiResponse } from "next";
+import { join } from "path";
 
 export const config = {
   api: {
@@ -8,20 +10,19 @@ export const config = {
   },
 };
 
+const typeDefs = readFileSync(join(process.cwd(), "schemas/index.gql"), {
+  encoding: "utf-8",
+});
+
 export default createYoga<{
   req: NextApiRequest;
   res: NextApiResponse;
 }>({
   schema: createSchema({
-    typeDefs: /* GraphQL */ `
-      type Query {
-        greetings: String
-      }
-    `,
+    typeDefs,
     resolvers: {
       Query: {
-        greetings: () =>
-          "This is the `greetings` field of the root `Query` type",
+        greet: () => "Hello",
       },
     },
   }),
