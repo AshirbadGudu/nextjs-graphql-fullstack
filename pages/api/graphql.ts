@@ -23,6 +23,12 @@ const resolvers: Resolvers = {
       };
     },
   },
+  Mutation: {
+    sendEmail: (_, { html, to }) => {
+      console.log(html);
+      return `Mail sent to ${to}`;
+    },
+  },
 };
 
 export default createYoga<any>({

@@ -6,3 +6,7 @@ type Cart {
   id: ID!
   totalItems: Int!
 }
+
+type Mutation {
+  sendEmail(html: String!, to: String!): String
+}

@@ -20,6 +20,17 @@ export type Cart = {
   totalItems: Scalars['Int'];
 };
 
+export type Mutation = {
+  __typename?: 'Mutation';
+  sendEmail?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationSendEmailArgs = {
+  html: Scalars['String'];
+  to: Scalars['String'];
+};
+
 export type Query = {
   __typename?: 'Query';
   cart?: Maybe<Cart>;
@@ -103,6 +114,7 @@ export type ResolversTypes = {
   Cart: ResolverTypeWrapper<Cart>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
@@ -113,6 +125,7 @@ export type ResolversParentTypes = {
   Cart: Cart;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
+  Mutation: {};
   Query: {};
   String: Scalars['String'];
 };
@@ -123,12 +136,17 @@ export type CartResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  sendEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSendEmailArgs, 'html' | 'to'>>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   cart?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<QueryCartArgs, 'id'>>;
 };
 
 export type Resolvers<ContextType = any> = {
   Cart?: CartResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 
