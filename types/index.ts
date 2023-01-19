@@ -20,9 +20,20 @@ export type Cart = {
   totalItems: Scalars['Int'];
 };
 
+export type ErrorResponse = {
+  __typename?: 'ErrorResponse';
+  code: Scalars['String'];
+  message: Scalars['String'];
+};
+
+export type FailureResponse = {
+  __typename?: 'FailureResponse';
+  error?: Maybe<ErrorResponse>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
-  sendEmail?: Maybe<Scalars['String']>;
+  sendEmail: SendMailResponse;
 };
 
 
@@ -39,6 +50,13 @@ export type Query = {
 
 export type QueryCartArgs = {
   id: Scalars['ID'];
+};
+
+export type SendMailResponse = FailureResponse | SuccessResponse;
+
+export type SuccessResponse = {
+  __typename?: 'SuccessResponse';
+  message: Scalars['String'];
 };
 
 
@@ -112,22 +130,30 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Cart: ResolverTypeWrapper<Cart>;
+  ErrorResponse: ResolverTypeWrapper<ErrorResponse>;
+  FailureResponse: ResolverTypeWrapper<FailureResponse>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
+  SendMailResponse: ResolversTypes['FailureResponse'] | ResolversTypes['SuccessResponse'];
   String: ResolverTypeWrapper<Scalars['String']>;
+  SuccessResponse: ResolverTypeWrapper<SuccessResponse>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Cart: Cart;
+  ErrorResponse: ErrorResponse;
+  FailureResponse: FailureResponse;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Mutation: {};
   Query: {};
+  SendMailResponse: ResolversParentTypes['FailureResponse'] | ResolversParentTypes['SuccessResponse'];
   String: Scalars['String'];
+  SuccessResponse: SuccessResponse;
 };
 
 export type CartResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cart'] = ResolversParentTypes['Cart']> = {
@@ -136,17 +162,41 @@ export type CartResolvers<ContextType = any, ParentType extends ResolversParentT
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type ErrorResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['ErrorResponse'] = ResolversParentTypes['ErrorResponse']> = {
+  code?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type FailureResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['FailureResponse'] = ResolversParentTypes['FailureResponse']> = {
+  error?: Resolver<Maybe<ResolversTypes['ErrorResponse']>, ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
-  sendEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType, RequireFields<MutationSendEmailArgs, 'html' | 'to'>>;
+  sendEmail?: Resolver<ResolversTypes['SendMailResponse'], ParentType, ContextType, RequireFields<MutationSendEmailArgs, 'html' | 'to'>>;
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
   cart?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<QueryCartArgs, 'id'>>;
 };
 
+export type SendMailResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['SendMailResponse'] = ResolversParentTypes['SendMailResponse']> = {
+  __resolveType: TypeResolveFn<'FailureResponse' | 'SuccessResponse', ParentType, ContextType>;
+};
+
+export type SuccessResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['SuccessResponse'] = ResolversParentTypes['SuccessResponse']> = {
+  message?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
 export type Resolvers<ContextType = any> = {
   Cart?: CartResolvers<ContextType>;
+  ErrorResponse?: ErrorResponseResolvers<ContextType>;
+  FailureResponse?: FailureResponseResolvers<ContextType>;
   Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
+  SendMailResponse?: SendMailResponseResolvers<ContextType>;
+  SuccessResponse?: SuccessResponseResolvers<ContextType>;
 };
 

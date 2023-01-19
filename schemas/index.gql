@@ -8,5 +8,20 @@ type Cart {
 }
 
 type Mutation {
-  sendEmail(html: String!, to: String!): String
+  sendEmail(html: String!, to: String!): SendMailResponse!
+}
+
+union SendMailResponse = SuccessResponse | FailureResponse
+
+type SuccessResponse {
+  message: String!
+}
+
+type FailureResponse {
+  error: ErrorResponse
+}
+
+type ErrorResponse {
+  message: String!
+  code: String!
 }
