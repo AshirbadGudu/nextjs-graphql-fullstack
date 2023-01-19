@@ -1,7 +1,7 @@
 import { readFileSync } from "fs";
 import { createYoga, createSchema } from "graphql-yoga";
 import { join } from "path";
-import { Resolvers } from "../../types";
+import { Resolvers } from "types";
 
 export const config = {
   api: {
