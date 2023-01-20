@@ -1,16 +1,10 @@
+import { CONFIG, transporter } from "configs";
 import { Resolvers } from "types";
 
 const resolvers: Resolvers = {
-  Query: {
-    cart: (_, { id }) => {
-      return {
-        id,
-        totalItems: 0,
-      };
-    },
-  },
+  Query: { cart: (_, { id }) => ({ id, totalItems: 0 }) },
   Mutation: {
-    sendEmail: (_, { html, to }) => {
+    sendEmail: async (_, { html, to }) => {
       if (!html?.length)
         return {
           __typename: "FailureResponse",
@@ -26,6 +20,20 @@ const resolvers: Resolvers = {
           error: {
             message: `Provided email address is not a valid`,
             code: "INVALID_RECIPIENT_EMAIL",
+          },
+        };
+      const { rejected, response } = await transporter.sendMail({
+        from: `${CONFIG.MAIL_ADDRESS}`,
+        to,
+        subject: "Subject: ",
+        html,
+      });
+      if (rejected?.length)
+        return {
+          __typename: "FailureResponse",
+          error: {
+            message: `Mail error: ${response}`,
+            code: "INTERNAL_SERVER_ERROR",
           },
         };
       return {
