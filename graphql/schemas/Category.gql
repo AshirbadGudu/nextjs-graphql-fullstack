@@ -1,0 +1,24 @@
+type Category {
+  id: ID!
+  name: String!
+  slug: String!
+  image: String
+  icon: String
+  isFeatured: Boolean!
+  isPublished: Boolean!
+  createdAt: String!
+  updatedAt: String!
+  metaTitle: String
+  metaDesc: String
+}
+
+input CategoryInput {
+  name: String!
+  slug: String!
+  image: String
+  icon: String
+  isFeatured: Boolean!
+  isPublished: Boolean!
+  metaTitle: String
+  metaDesc: String
+}

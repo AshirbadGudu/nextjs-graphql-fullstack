@@ -1,0 +1,11 @@
+type Query {
+  categories(
+    filter: String
+    sort: String
+    limit: Int
+    offset: Int
+  ): [Category!]!
+  brands(filter: String, sort: String, limit: Int, offset: Int): [Brand!]!
+  category(slug: String!): Category
+  brand(slug: String!): Brand
+}
