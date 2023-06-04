@@ -1,86 +1,64 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
+import type { NextPage } from "next";
+import { gql, useMutation } from "@apollo/client";
+import { useState } from "react";
+
+const SEND_EMAIL = gql`
+  mutation sendEmail($to: String!, $html: String!) {
+    sendEmail(html: $html, to: $to) {
+      ... on SuccessResponse {
+        message
+      }
+      ... on FailureResponse {
+        error {
+          message
+          code
+        }
+      }
+    }
+  }
+`;
 
 const Home: NextPage = () => {
+  const [sendEmail, { loading }] = useMutation(SEND_EMAIL);
+  const [to, setTo] = useState("");
+  const [htmlStr, setHtml] = useState("");
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="rounded-md bg-gray-100 p-3 font-mono text-lg">
-            pages/index.tsx
-          </code>
-        </p>
-
-        <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and its API.
-            </p>
-          </a>
-
-          <a
-            href="https://nextjs.org/learn"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
-
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className="flex h-24 w-full items-center justify-center border-t">
-        <a
-          className="flex items-center justify-center gap-2"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className="grid place-content-center h-screen">
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const res = await sendEmail({ variables: { to, html: htmlStr } });
+          if (res?.data?.sendEmail?.error)
+            return console.log(res?.data?.sendEmail?.error?.message);
+          console.log(res?.data?.sendEmail?.message);
+        }}
+        className="grid gap-3 shadow-lg p-4 rounded border border-emerald-100"
+      >
+        <h4>Enter Details To Test Mail</h4>
+        <input
+          type="email"
+          className="border shadow p-2 rounded"
+          placeholder="Enter Email Address"
+          value={to}
+          onChange={(e) => setTo(e.target.value)}
+        />
+        <textarea
+          className="border shadow p-2 rounded"
+          placeholder="Enter Email Body"
+          value={htmlStr}
+          onChange={(e) => setHtml(e.target.value)}
+        ></textarea>
+        <button
+          className={`border shadow p-2 rounded transition hover:bg-emerald-50 hover:scale-105 ${
+            loading ? "bg-gray-50" : ""
+          }`}
+          type="submit"
         >
-          Powered by{' '}
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </a>
-      </footer>
+          {loading ? `Please Wait` : `Send Email`}
+        </button>
+      </form>
     </div>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

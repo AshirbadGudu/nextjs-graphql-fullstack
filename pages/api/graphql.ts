@@ -9,9 +9,6 @@ export const config = {
 };
 
 export default createYoga<any>({
-  schema: createSchema({
-    typeDefs,
-    resolvers,
-  }),
+  schema: createSchema({ typeDefs, resolvers }),
   graphqlEndpoint: "/api/graphql",
 });

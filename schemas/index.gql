@@ -1,0 +1,27 @@
+type Query {
+  cart(id: ID!): Cart
+}
+
+type Cart {
+  id: ID!
+  totalItems: Int!
+}
+
+type Mutation {
+  sendEmail(html: String!, to: String!): SendMailResponse!
+}
+
+union SendMailResponse = SuccessResponse | FailureResponse
+
+type SuccessResponse {
+  message: String!
+}
+
+type FailureResponse {
+  error: ErrorResponse
+}
+
+type ErrorResponse {
+  message: String!
+  code: String!
+}
