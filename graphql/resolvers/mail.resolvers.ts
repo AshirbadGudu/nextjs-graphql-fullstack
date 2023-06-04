@@ -1,8 +1,7 @@
 import { CONFIG, transporter } from "configs";
 import { Resolvers } from "types";
 
-const resolvers: Resolvers = {
-  Query: { cart: (_, { id }) => ({ id, totalItems: 0 }) },
+export const MailResolvers: Resolvers = {
   Mutation: {
     sendEmail: async (_, { html, to }) => {
       try {
@@ -54,5 +53,3 @@ const resolvers: Resolvers = {
     },
   },
 };
-
-export default resolvers;

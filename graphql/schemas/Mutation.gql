@@ -5,4 +5,5 @@ type Mutation {
   updateBrand(id: ID!, input: BrandInput!): Brand
   deleteCategory(id: ID!): Category
   deleteBrand(id: ID!): Brand
+  sendEmail(html: String!, to: String!): SendMailResponse!
 }
