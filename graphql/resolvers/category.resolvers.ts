@@ -1,73 +1,38 @@
-import { Category, Resolvers } from "../../types";
-
-// Write category queries and mutations
-const categoriesData: Category[] = [
-  {
-    id: "1",
-    name: "Category 1",
-    slug: "category-1",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    isFeatured: true,
-    isPublished: false,
-  },
-];
+import { prisma } from "configs";
+import { Resolvers } from "../../types";
 
 export const CategoryResolvers: Resolvers = {
   Query: {
-    categories: () => {
-      return categoriesData;
+    categories: async () => {
+      const categories = (await prisma.category.findMany()) as any;
+      return categories;
     },
-    category: (_, { slug }) => {
-      return categoriesData.find((category) => category.slug === slug) || null;
+    category: async (_, { slug }) => {
+      const category = (await prisma.category.findUnique({
+        where: { slug },
+      })) as any;
+      return category;
     },
   },
   Mutation: {
-    createCategory: (_, { input }) => {
-      // Logic to create a new category
-      const newCategory = {
-        id: generateNewId(), // Generate a new ID
-        createdAt: getCurrentDateTime(), // Get the current date and time
-        updatedAt: getCurrentDateTime(),
-        ...input,
-      };
-      categoriesData.push(newCategory);
+    createCategory: async (_, { input }) => {
+      const newCategory = (await prisma.category.create({
+        data: input,
+      })) as any;
       return newCategory;
     },
-    updateCategory: (_, { id, input }) => {
-      const categoryIndex = categoriesData.findIndex(
-        (category) => category.id === id
-      );
-      if (categoryIndex !== -1) {
-        const updatedCategory = {
-          ...categoriesData[categoryIndex],
-          updatedAt: getCurrentDateTime(),
-          ...input,
-        };
-        categoriesData[categoryIndex] = updatedCategory;
-        return updatedCategory;
-      }
-      return null;
+    updateCategory: async (_, { id, input }) => {
+      const updatedCategory = (await prisma.category.update({
+        where: { id },
+        data: input,
+      })) as any;
+      return updatedCategory;
     },
-    deleteCategory: (_, { id }) => {
-      const categoryIndex = categoriesData.findIndex(
-        (category) => category.id === id
-      );
-      if (categoryIndex !== -1) {
-        const deletedCategory = categoriesData.splice(categoryIndex, 1)[0];
-        return deletedCategory;
-      }
-      return null;
+    deleteCategory: async (_, { id }) => {
+      const deletedCategory = (await prisma.category.delete({
+        where: { id },
+      })) as any;
+      return deletedCategory;
     },
   },
 };
-
-// Helper function to generate a new unique ID (you can implement your own logic)
-function generateNewId() {
-  return `${Date.now()}`;
-}
-
-// Helper function to get the current date and time
-function getCurrentDateTime() {
-  return new Date().toISOString();
-}
