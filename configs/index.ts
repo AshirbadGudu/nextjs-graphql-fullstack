@@ -1,3 +1,4 @@
+import { PrismaClient } from "@prisma/client";
 import nodemailer from "nodemailer";
 
 type ConfigType = {
@@ -15,3 +16,5 @@ export const transporter = nodemailer.createTransport({
   secure: true,
   auth: { user: CONFIG.MAIL_USER, pass: CONFIG.MAIL_PASS },
 });
+
+export const prisma = new PrismaClient();

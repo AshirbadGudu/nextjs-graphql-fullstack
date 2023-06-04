@@ -1,0 +1,213 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+enum Gender {
+  Male
+  Female
+}
+
+enum Role {
+  Admin
+  Customer
+}
+
+enum OrderStatus {
+  Pending
+  Processing
+  Shipped
+  Delivered
+}
+
+type FCMToken {
+  web     String?
+  android String?
+  ios     String?
+}
+
+type Location {
+  lat     Float?
+  lng     Float?
+  address String?
+}
+
+model Brand {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String    @unique
+  image       String?   @default("https://via.placeholder.com/300x280")
+  icon        String?
+  isFeatured  Boolean   @default(false)
+  isPublished Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+
+  @@map("BRANDS")
+}
+
+model Category {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  slug        String    @unique
+  image       String?   @default("https://via.placeholder.com/300x280")
+  icon        String?
+  isFeatured  Boolean   @default(false)
+  isPublished Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  metaTitle   String?
+  metaDesc    String?
+  products    Product[] @relation("ProductCategory", fields: [productIds], references: [id])
+  productIds  String[]  @db.ObjectId
+
+  @@map("CATEGORIES")
+}
+
+model Product {
+  id           String           @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  description  String
+  sku          String           @unique
+  slug         String           @unique
+  images       String[]         @default(["https://via.placeholder.com/400x320"])
+  isFeatured   Boolean          @default(false)
+  isPublished  Boolean          @default(false)
+  createdAt    DateTime         @default(now())
+  updatedAt    DateTime         @updatedAt
+  metaTitle    String?
+  metaDesc     String?
+  metaKeywords String?
+  categories   Category[]       @relation("ProductCategory", fields: [categoryIds], references: [id])
+  brand        Brand?           @relation(fields: [brandId], references: [id])
+  categoryIds  String[]         @db.ObjectId
+  variants     ProductVariant[]
+  reviews      Review[]
+  brandId      String?          @db.ObjectId
+
+  @@map("PRODUCTS")
+}
+
+model ProductVariant {
+  id           String      @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  regularPrice Float
+  salePrice    Float
+  stock        Int         @default(1)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+  product      Product     @relation(fields: [productId], references: [id])
+  productId    String      @db.ObjectId
+  cartItems    Cart[]
+  orderedItems OrderItem[]
+
+  @@map("VARIANTS")
+}
+
+model User {
+  id         String    @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  email      String    @unique
+  password   String
+  phone      String?
+  photo      String?   @default("https://via.placeholder.com/420")
+  isBlocked  Boolean   @default(false)
+  isVerified Boolean   @default(false)
+  gender     Gender?
+  role       Role      @default(Customer)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  fcmToken   FCMToken?
+  location   Location?
+  reviews    Review[]
+  cartItems  Cart[]
+  addresses  Address[]
+  orders     Order[]
+
+  @@map("USERS")
+}
+
+model Cart {
+  id         String         @id @default(auto()) @map("_id") @db.ObjectId
+  quantity   Int            @default(0)
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+  customer   User?          @relation(fields: [customerId], references: [id])
+  customerId String?        @db.ObjectId
+  product    ProductVariant @relation(fields: [productId], references: [id])
+  productId  String         @db.ObjectId
+
+  @@map("CART")
+}
+
+model Review {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  rating      Int
+  comment     String?
+  isPublished Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  customer    User     @relation(fields: [customerId], references: [id])
+  customerId  String   @db.ObjectId
+  product     Product  @relation(fields: [productId], references: [id])
+  productId   String   @db.ObjectId
+
+  @@map("REVIEWS")
+}
+
+model Address {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  phone          String
+  zip            String
+  city           String
+  addressLineOne String
+  addressLineTwo String?
+  landmark       String?
+  isDefault      Boolean  @default(false)
+  customer       User     @relation(fields: [customerId], references: [id])
+  customerId     String   @db.ObjectId
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  orders         Order[]
+
+  @@map("ADDRESSES")
+}
+
+model Order {
+  id                String      @id @default(auto()) @map("_id") @db.ObjectId
+  customer          User        @relation(fields: [customerId], references: [id])
+  customerId        String      @db.ObjectId
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+  deliveryAddress   Address     @relation(fields: [deliveryAddressId], references: [id])
+  deliveryAddressId String      @db.ObjectId
+  total             Float
+  deliveryCharge    Float?      @default(0)
+  status            OrderStatus @default(Pending)
+  orderedItems      OrderItem[]
+
+  @@map("ORDERS")
+}
+
+model OrderItem {
+  id        String         @id @default(auto()) @map("_id") @db.ObjectId
+  variant   ProductVariant @relation(fields: [variantId], references: [id])
+  variantId String         @db.ObjectId
+  quantity  Int            @default(1)
+  price     Float
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+  Order     Order          @relation(fields: [orderId], references: [id])
+  orderId   String         @db.ObjectId
+
+  @@map("ORDER_ITEMS")
+}
