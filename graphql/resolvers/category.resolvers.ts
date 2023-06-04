@@ -3,8 +3,20 @@ import { Resolvers } from "../../types";
 
 export const CategoryResolvers: Resolvers = {
   Query: {
-    categories: async () => {
-      const categories = (await prisma.category.findMany()) as any;
+    categories: async (_, { filter, limit, offset, sort }) => {
+      const categories = (await prisma.category.findMany({
+        take: limit || undefined,
+        skip: offset || undefined,
+        orderBy: {
+          [sort?.field || "createdAt"]: sort?.order || "desc",
+        },
+        where: {
+          [filter?.field || "name"]: {
+            contains: filter?.value || "",
+            mode: "insensitive",
+          },
+        },
+      })) as any;
       return categories;
     },
     category: async (_, { slug }) => {

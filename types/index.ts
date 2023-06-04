@@ -99,6 +99,11 @@ export type FailureResponse = {
   error?: Maybe<ErrorResponse>;
 };
 
+export type Filter = {
+  field?: InputMaybe<Scalars['String']>;
+  value?: InputMaybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createBrand?: Maybe<Brand>;
@@ -148,6 +153,11 @@ export type MutationUpdateCategoryArgs = {
   input: CategoryUpdateInput;
 };
 
+export enum Order {
+  Asc = 'asc',
+  Desc = 'desc'
+}
+
 export type Query = {
   __typename?: 'Query';
   brand?: Maybe<Brand>;
@@ -163,18 +173,18 @@ export type QueryBrandArgs = {
 
 
 export type QueryBrandsArgs = {
-  filter?: InputMaybe<Scalars['String']>;
+  filter?: InputMaybe<Filter>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  sort?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Sort>;
 };
 
 
 export type QueryCategoriesArgs = {
-  filter?: InputMaybe<Scalars['String']>;
+  filter?: InputMaybe<Filter>;
   limit?: InputMaybe<Scalars['Int']>;
   offset?: InputMaybe<Scalars['Int']>;
-  sort?: InputMaybe<Scalars['String']>;
+  sort?: InputMaybe<Sort>;
 };
 
 
@@ -183,6 +193,11 @@ export type QueryCategoryArgs = {
 };
 
 export type SendMailResponse = FailureResponse | SuccessResponse;
+
+export type Sort = {
+  field?: InputMaybe<Scalars['String']>;
+  order?: InputMaybe<Order>;
+};
 
 export type SuccessResponse = {
   __typename?: 'SuccessResponse';
@@ -267,11 +282,14 @@ export type ResolversTypes = {
   CategoryUpdateInput: CategoryUpdateInput;
   ErrorResponse: ResolverTypeWrapper<ErrorResponse>;
   FailureResponse: ResolverTypeWrapper<FailureResponse>;
+  Filter: Filter;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
   Mutation: ResolverTypeWrapper<{}>;
+  Order: Order;
   Query: ResolverTypeWrapper<{}>;
   SendMailResponse: ResolversTypes['FailureResponse'] | ResolversTypes['SuccessResponse'];
+  Sort: Sort;
   String: ResolverTypeWrapper<Scalars['String']>;
   SuccessResponse: ResolverTypeWrapper<SuccessResponse>;
 };
@@ -287,11 +305,13 @@ export type ResolversParentTypes = {
   CategoryUpdateInput: CategoryUpdateInput;
   ErrorResponse: ErrorResponse;
   FailureResponse: FailureResponse;
+  Filter: Filter;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
   Mutation: {};
   Query: {};
   SendMailResponse: ResolversParentTypes['FailureResponse'] | ResolversParentTypes['SuccessResponse'];
+  Sort: Sort;
   String: Scalars['String'];
   SuccessResponse: SuccessResponse;
 };

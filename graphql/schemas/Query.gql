@@ -1,11 +1,21 @@
+enum Order {
+  asc
+  desc
+}
+
+input Sort {
+  field: String
+  order: Order
+}
+
+input Filter {
+  field: String
+  value: String
+}
+
 type Query {
-  categories(
-    filter: String
-    sort: String
-    limit: Int
-    offset: Int
-  ): [Category!]!
-  brands(filter: String, sort: String, limit: Int, offset: Int): [Brand!]!
+  categories(filter: Filter, limit: Int, offset: Int, sort: Sort): [Category!]!
+  brands(filter: Filter, sort: Sort, limit: Int, offset: Int): [Brand!]!
   category(slug: String!): Category
   brand(slug: String!): Brand
 }

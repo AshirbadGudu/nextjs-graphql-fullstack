@@ -3,8 +3,20 @@ import { Resolvers } from "../../types";
 
 export const BrandResolvers: Resolvers = {
   Query: {
-    brands: async () => {
-      const brands = (await prisma.brand.findMany()) as any;
+    brands: async (_, { filter, limit, offset, sort }) => {
+      const brands = (await prisma.brand.findMany({
+        take: limit || undefined,
+        skip: offset || undefined,
+        orderBy: {
+          [sort?.field || "createdAt"]: sort?.order || "desc",
+        },
+        where: {
+          [filter?.field || "name"]: {
+            contains: filter?.value || "",
+            mode: "insensitive",
+          },
+        },
+      })) as any;
       return brands;
     },
     brand: async (_, { slug }) => {
