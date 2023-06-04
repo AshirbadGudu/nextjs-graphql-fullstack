@@ -1,8 +1,8 @@
 type Mutation {
   createCategory(input: CategoryInput!): Category
   createBrand(input: BrandInput!): Brand
-  updateCategory(id: ID!, input: CategoryInput!): Category
-  updateBrand(id: ID!, input: BrandInput!): Brand
+  updateCategory(id: ID!, input: CategoryUpdateInput!): Category
+  updateBrand(id: ID!, input: BrandUpdateInput!): Brand
   deleteCategory(id: ID!): Category
   deleteBrand(id: ID!): Brand
   sendEmail(html: String!, to: String!): SendMailResponse!

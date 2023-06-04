@@ -17,8 +17,19 @@ input CategoryInput {
   slug: String!
   image: String
   icon: String
-  isFeatured: Boolean!
-  isPublished: Boolean!
+  isFeatured: Boolean
+  isPublished: Boolean
+  metaTitle: String
+  metaDesc: String
+}
+
+input CategoryUpdateInput {
+  name: String
+  slug: String
+  image: String
+  icon: String
+  isFeatured: Boolean
+  isPublished: Boolean
   metaTitle: String
   metaDesc: String
 }

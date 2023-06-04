@@ -32,12 +32,23 @@ export type Brand = {
 export type BrandInput = {
   icon?: InputMaybe<Scalars['String']>;
   image?: InputMaybe<Scalars['String']>;
-  isFeatured: Scalars['Boolean'];
-  isPublished: Scalars['Boolean'];
+  isFeatured?: InputMaybe<Scalars['Boolean']>;
+  isPublished?: InputMaybe<Scalars['Boolean']>;
   metaDesc?: InputMaybe<Scalars['String']>;
   metaTitle?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   slug: Scalars['String'];
+};
+
+export type BrandUpdateInput = {
+  icon?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<Scalars['String']>;
+  isFeatured?: InputMaybe<Scalars['Boolean']>;
+  isPublished?: InputMaybe<Scalars['Boolean']>;
+  metaDesc?: InputMaybe<Scalars['String']>;
+  metaTitle?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
 };
 
 export type Category = {
@@ -58,12 +69,23 @@ export type Category = {
 export type CategoryInput = {
   icon?: InputMaybe<Scalars['String']>;
   image?: InputMaybe<Scalars['String']>;
-  isFeatured: Scalars['Boolean'];
-  isPublished: Scalars['Boolean'];
+  isFeatured?: InputMaybe<Scalars['Boolean']>;
+  isPublished?: InputMaybe<Scalars['Boolean']>;
   metaDesc?: InputMaybe<Scalars['String']>;
   metaTitle?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
   slug: Scalars['String'];
+};
+
+export type CategoryUpdateInput = {
+  icon?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<Scalars['String']>;
+  isFeatured?: InputMaybe<Scalars['Boolean']>;
+  isPublished?: InputMaybe<Scalars['Boolean']>;
+  metaDesc?: InputMaybe<Scalars['String']>;
+  metaTitle?: InputMaybe<Scalars['String']>;
+  name?: InputMaybe<Scalars['String']>;
+  slug?: InputMaybe<Scalars['String']>;
 };
 
 export type ErrorResponse = {
@@ -117,13 +139,13 @@ export type MutationSendEmailArgs = {
 
 export type MutationUpdateBrandArgs = {
   id: Scalars['ID'];
-  input: BrandInput;
+  input: BrandUpdateInput;
 };
 
 
 export type MutationUpdateCategoryArgs = {
   id: Scalars['ID'];
-  input: CategoryInput;
+  input: CategoryUpdateInput;
 };
 
 export type Query = {
@@ -239,8 +261,10 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
   Brand: ResolverTypeWrapper<Brand>;
   BrandInput: BrandInput;
+  BrandUpdateInput: BrandUpdateInput;
   Category: ResolverTypeWrapper<Category>;
   CategoryInput: CategoryInput;
+  CategoryUpdateInput: CategoryUpdateInput;
   ErrorResponse: ResolverTypeWrapper<ErrorResponse>;
   FailureResponse: ResolverTypeWrapper<FailureResponse>;
   ID: ResolverTypeWrapper<Scalars['ID']>;
@@ -257,8 +281,10 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
   Brand: Brand;
   BrandInput: BrandInput;
+  BrandUpdateInput: BrandUpdateInput;
   Category: Category;
   CategoryInput: CategoryInput;
+  CategoryUpdateInput: CategoryUpdateInput;
   ErrorResponse: ErrorResponse;
   FailureResponse: FailureResponse;
   ID: Scalars['ID'];

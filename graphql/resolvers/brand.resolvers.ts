@@ -1,61 +1,39 @@
-import { Brand, Resolvers } from "../../types";
-import { generateNewId, getCurrentDateTime } from "../helpers";
-
-const brandsData: Brand[] = [
-  {
-    id: "1",
-    name: "Brand 1",
-    slug: "brand-1",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-    isFeatured: true,
-    isPublished: false,
-  },
-];
+import { prisma } from "configs";
+import { Resolvers } from "../../types";
 
 export const BrandResolvers: Resolvers = {
   Query: {
-    brands: () => {
-      return brandsData;
+    brands: async () => {
+      const brands = (await prisma.brand.findMany()) as any;
+      return brands;
     },
-    brand: (_, { slug }) => {
-      return brandsData.find((brand) => brand.slug === slug) || null;
+    brand: async (_, { slug }) => {
+      const brand = (await prisma.brand.findUnique({
+        where: { slug },
+      })) as any;
+      return brand;
     },
   },
   Mutation: {
-    createBrand: (_, { input }) => {
-      // Logic to create a new brand
-      const newBrand = {
-        id: generateNewId(),
-        createdAt: getCurrentDateTime(),
-        updatedAt: getCurrentDateTime(),
-        ...input,
-      };
-      brandsData.push(newBrand);
+    createBrand: async (_, { input }) => {
+      const newBrand = (await prisma.brand.create({
+        data: input as any,
+      })) as any;
       return newBrand;
     },
 
-    updateBrand: (_, { id, input }) => {
-      const brandIndex = brandsData.findIndex((brand) => brand.id === id);
-      if (brandIndex !== -1) {
-        const updatedBrand = {
-          ...brandsData[brandIndex],
-          updatedAt: getCurrentDateTime(),
-          ...input,
-        };
-        brandsData[brandIndex] = updatedBrand;
-        return updatedBrand;
-      }
-      return null;
+    updateBrand: async (_, { id, input }) => {
+      const updatedBrand = (await prisma.brand.update({
+        where: { id },
+        data: input as any,
+      })) as any;
+      return updatedBrand;
     },
-
-    deleteBrand: (_, { id }) => {
-      const brandIndex = brandsData.findIndex((brand) => brand.id === id);
-      if (brandIndex !== -1) {
-        const deletedBrand = brandsData.splice(brandIndex, 1)[0];
-        return deletedBrand;
-      }
-      return null;
+    deleteBrand: async (_, { id }) => {
+      const deletedBrand = (await prisma.brand.delete({
+        where: { id },
+      })) as any;
+      return deletedBrand;
     },
   },
 };

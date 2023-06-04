@@ -17,14 +17,14 @@ export const CategoryResolvers: Resolvers = {
   Mutation: {
     createCategory: async (_, { input }) => {
       const newCategory = (await prisma.category.create({
-        data: input,
+        data: input as any,
       })) as any;
       return newCategory;
     },
     updateCategory: async (_, { id, input }) => {
       const updatedCategory = (await prisma.category.update({
         where: { id },
-        data: input,
+        data: input as any,
       })) as any;
       return updatedCategory;
     },

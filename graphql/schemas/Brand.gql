@@ -17,8 +17,19 @@ input BrandInput {
   slug: String!
   image: String
   icon: String
-  isFeatured: Boolean!
-  isPublished: Boolean!
+  isFeatured: Boolean
+  isPublished: Boolean
+  metaTitle: String
+  metaDesc: String
+}
+
+input BrandUpdateInput {
+  name: String
+  slug: String
+  image: String
+  icon: String
+  isFeatured: Boolean
+  isPublished: Boolean
   metaTitle: String
   metaDesc: String
 }
