@@ -1,8 +1,7 @@
 import { readFileSync } from "fs";
 import { createYoga, createSchema } from "graphql-yoga";
 import { join } from "path";
-import { Resolvers } from "../../types";
-
+import { resolvers } from "../../graphql/resolvers";
 export const config = {
   api: {
     // Disable body parsing (required for file uploads)
@@ -10,20 +9,12 @@ export const config = {
   },
 };
 
-const typeDefs = readFileSync(join(process.cwd(), "schemas/index.gql"), {
-  encoding: "utf-8",
-});
-
-const resolvers: Resolvers = {
-  Query: {
-    cart: (_, { id }) => {
-      return {
-        id,
-        totalItems: 0,
-      };
-    },
-  },
-};
+const typeDefs = readFileSync(
+  join(process.cwd(), "graphql/schemas/index.gql"),
+  {
+    encoding: "utf-8",
+  }
+);
 
 export default createYoga<any>({
   schema: createSchema({

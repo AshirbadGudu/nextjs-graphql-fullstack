@@ -14,20 +14,132 @@ export type Scalars = {
   Float: number;
 };
 
-export type Cart = {
-  __typename?: 'Cart';
+export type Brand = {
+  __typename?: 'Brand';
+  createdAt: Scalars['String'];
+  icon?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  totalItems: Scalars['Int'];
+  image?: Maybe<Scalars['String']>;
+  isFeatured: Scalars['Boolean'];
+  isPublished: Scalars['Boolean'];
+  metaDesc?: Maybe<Scalars['String']>;
+  metaTitle?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type BrandInput = {
+  icon?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<Scalars['String']>;
+  isFeatured: Scalars['Boolean'];
+  isPublished: Scalars['Boolean'];
+  metaDesc?: InputMaybe<Scalars['String']>;
+  metaTitle?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  slug: Scalars['String'];
+};
+
+export type Category = {
+  __typename?: 'Category';
+  createdAt: Scalars['String'];
+  icon?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  image?: Maybe<Scalars['String']>;
+  isFeatured: Scalars['Boolean'];
+  isPublished: Scalars['Boolean'];
+  metaDesc?: Maybe<Scalars['String']>;
+  metaTitle?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  slug: Scalars['String'];
+  updatedAt: Scalars['String'];
+};
+
+export type CategoryInput = {
+  icon?: InputMaybe<Scalars['String']>;
+  image?: InputMaybe<Scalars['String']>;
+  isFeatured: Scalars['Boolean'];
+  isPublished: Scalars['Boolean'];
+  metaDesc?: InputMaybe<Scalars['String']>;
+  metaTitle?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+  slug: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  createBrand?: Maybe<Brand>;
+  createCategory?: Maybe<Category>;
+  deleteBrand?: Maybe<Brand>;
+  deleteCategory?: Maybe<Category>;
+  updateBrand?: Maybe<Brand>;
+  updateCategory?: Maybe<Category>;
+};
+
+
+export type MutationCreateBrandArgs = {
+  input: BrandInput;
+};
+
+
+export type MutationCreateCategoryArgs = {
+  input: CategoryInput;
+};
+
+
+export type MutationDeleteBrandArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationDeleteCategoryArgs = {
+  id: Scalars['ID'];
+};
+
+
+export type MutationUpdateBrandArgs = {
+  id: Scalars['ID'];
+  input: BrandInput;
+};
+
+
+export type MutationUpdateCategoryArgs = {
+  id: Scalars['ID'];
+  input: CategoryInput;
 };
 
 export type Query = {
   __typename?: 'Query';
-  cart?: Maybe<Cart>;
+  brand?: Maybe<Brand>;
+  brands: Array<Brand>;
+  categories: Array<Category>;
+  category?: Maybe<Category>;
 };
 
 
-export type QueryCartArgs = {
-  id: Scalars['ID'];
+export type QueryBrandArgs = {
+  slug: Scalars['String'];
+};
+
+
+export type QueryBrandsArgs = {
+  filter?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryCategoriesArgs = {
+  filter?: InputMaybe<Scalars['String']>;
+  limit?: InputMaybe<Scalars['Int']>;
+  offset?: InputMaybe<Scalars['Int']>;
+  sort?: InputMaybe<Scalars['String']>;
+};
+
+
+export type QueryCategoryArgs = {
+  slug: Scalars['String'];
 };
 
 
@@ -100,9 +212,13 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>;
-  Cart: ResolverTypeWrapper<Cart>;
+  Brand: ResolverTypeWrapper<Brand>;
+  BrandInput: BrandInput;
+  Category: ResolverTypeWrapper<Category>;
+  CategoryInput: CategoryInput;
   ID: ResolverTypeWrapper<Scalars['ID']>;
   Int: ResolverTypeWrapper<Scalars['Int']>;
+  Mutation: ResolverTypeWrapper<{}>;
   Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']>;
 };
@@ -110,25 +226,67 @@ export type ResolversTypes = {
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'];
-  Cart: Cart;
+  Brand: Brand;
+  BrandInput: BrandInput;
+  Category: Category;
+  CategoryInput: CategoryInput;
   ID: Scalars['ID'];
   Int: Scalars['Int'];
+  Mutation: {};
   Query: {};
   String: Scalars['String'];
 };
 
-export type CartResolvers<ContextType = any, ParentType extends ResolversParentTypes['Cart'] = ResolversParentTypes['Cart']> = {
+export type BrandResolvers<ContextType = any, ParentType extends ResolversParentTypes['Brand'] = ResolversParentTypes['Brand']> = {
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
-  totalItems?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isFeatured?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isPublished?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  metaDesc?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metaTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
+export type CategoryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Category'] = ResolversParentTypes['Category']> = {
+  createdAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  icon?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>;
+  image?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  isFeatured?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  isPublished?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
+  metaDesc?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  metaTitle?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>;
+  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  slug?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  updatedAt?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
+  __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
+};
+
+export type MutationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Mutation'] = ResolversParentTypes['Mutation']> = {
+  createBrand?: Resolver<Maybe<ResolversTypes['Brand']>, ParentType, ContextType, RequireFields<MutationCreateBrandArgs, 'input'>>;
+  createCategory?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, RequireFields<MutationCreateCategoryArgs, 'input'>>;
+  deleteBrand?: Resolver<Maybe<ResolversTypes['Brand']>, ParentType, ContextType, RequireFields<MutationDeleteBrandArgs, 'id'>>;
+  deleteCategory?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, RequireFields<MutationDeleteCategoryArgs, 'id'>>;
+  updateBrand?: Resolver<Maybe<ResolversTypes['Brand']>, ParentType, ContextType, RequireFields<MutationUpdateBrandArgs, 'id' | 'input'>>;
+  updateCategory?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, RequireFields<MutationUpdateCategoryArgs, 'id' | 'input'>>;
+};
+
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
-  cart?: Resolver<Maybe<ResolversTypes['Cart']>, ParentType, ContextType, RequireFields<QueryCartArgs, 'id'>>;
+  brand?: Resolver<Maybe<ResolversTypes['Brand']>, ParentType, ContextType, RequireFields<QueryBrandArgs, 'slug'>>;
+  brands?: Resolver<Array<ResolversTypes['Brand']>, ParentType, ContextType, Partial<QueryBrandsArgs>>;
+  categories?: Resolver<Array<ResolversTypes['Category']>, ParentType, ContextType, Partial<QueryCategoriesArgs>>;
+  category?: Resolver<Maybe<ResolversTypes['Category']>, ParentType, ContextType, RequireFields<QueryCategoryArgs, 'slug'>>;
 };
 
 export type Resolvers<ContextType = any> = {
-  Cart?: CartResolvers<ContextType>;
+  Brand?: BrandResolvers<ContextType>;
+  Category?: CategoryResolvers<ContextType>;
+  Mutation?: MutationResolvers<ContextType>;
   Query?: QueryResolvers<ContextType>;
 };
 
